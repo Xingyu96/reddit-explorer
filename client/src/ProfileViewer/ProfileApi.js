@@ -11,11 +11,12 @@
   })
     .then(data => data.json())
     .then(dataJson => {
-      console.log(dataJson)
+      if (dataJson.error) {
+        return dataJson
+      }
       return dataJson.user
     })
     .catch((e) => {
       console.log(e)
-      return {}
     })
 }

@@ -6,15 +6,21 @@ const ProfileViewer = () => {
   const [username, setUsername] = useState("");
   const [resultUsername, setResultUsername] = useState("Search Result");
   const [userInfo, setUserInfo] = useState(null);
+  const [error, setError] = useState(null);
   
   const setResultName = (name) => {
     if (name.length === 0) {
       setResultUsername("Search Result")
     } else {
       setResultUsername(name)
-      getList(name).then( (userInfo) => {
-        console.log(userInfo)
-        setUserInfo(userInfo)
+      getList(name).then((userInfo) => {
+        if (userInfo.error) {
+          setUserInfo(null)
+          setError(userInfo.error)
+        } else {
+          setUserInfo(userInfo)
+          setError(null)
+        }
       })
     }
   }
@@ -22,7 +28,7 @@ const ProfileViewer = () => {
   return (
     <div className="container">
       <div className="columns">
-        <div className="column is-6-desktop is-offset-3-desktop">
+        <div className="column is-10-tablet is-offset-1-tablet is-10-mobile is-offset-1-mobile is-6-desktop is-offset-3-desktop">
           <section className="section no-left-right-padding">
             <h2 className="title">Username Search</h2>
             <h3 className="subtitle">Search for reddit username to pull up basic information</h3>
@@ -59,7 +65,7 @@ const ProfileViewer = () => {
                   </thead>
                   <tbody>
                   <tr>
-                    <td>Number of posts</td>
+                    <td>Number of comments</td>
                     <td>{userInfo.posts}</td>
                   </tr>
                   <tr>
@@ -68,6 +74,11 @@ const ProfileViewer = () => {
                   </tr>
                   </tbody>
                 </table>
+              </div>
+            )}
+            {error && (
+              <div className="notification is-danger is-light">
+                {error}
               </div>
             )}
           </div>
